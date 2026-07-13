@@ -1,3 +1,7 @@
+# Tasktify
+
+A modern, full-stack task management web application inspired by Todoist, Linear, and Notion.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,3 +38,50 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Features
+
+- Google Authentication
+- Dashboard
+- List View
+- Calendar View
+- Backlog
+- Categories
+- Priorities
+- Search
+- Filters
+- Subtasks
+- Recurring Tasks
+- Responsive Design
+- Dark Mode
+
+## Tech Stack
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Prisma
+- PostgreSQL
+- Auth.js
+- Vercel
+
+## Status
+
+🚧 Under active development
+
+## Planned Features
+
+- PWA
+- Notifications
+- AI Task Breakdown
+- Drag & Drop
+- Statistics
+
+## Markdown Files
+
+PROJECT.md → why we're building it
+ARCHITECTURE.md → how we're building it
+DATABASE.md → how data works
+FEATURES.md → what we're building
+DEVELOPMENT.md → how we work
