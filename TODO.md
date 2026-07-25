@@ -1,16 +1,16 @@
 # TODO
 
 ## Milestone 1
-- [ ] Initialize Next.js project
-- [ ] Configure TypeScript
-- [ ] Install Tailwind CSS
-- [ ] Configure shadcn/ui
-- [ ] Set up Prisma
-- [ ] Create Neon PostgreSQL database
-- [ ] Configure Auth.js
-- [ ] Create responsive app shell
-- [ ] Add dark mode
-- [ ] Deploy initial app to Vercel
+- [x] Initialize Next.js project
+- [x] Configure TypeScript
+- [x] Install Tailwind CSS
+- [x] Configure shadcn/ui
+- [x] Set up Prisma
+- [x] Create Neon PostgreSQL database
+- [x] Configure Auth.js
+- [x] Create responsive app shell
+- [x] Add dark mode
+- [x] Deploy initial app to Vercel
 
 ## Milestone 2
 - [ ] Design database schema
