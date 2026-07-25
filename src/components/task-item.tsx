@@ -4,8 +4,8 @@ import { updateTaskStatus, deleteTask } from "@/app/actions/tasks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2 } from "lucide-react";
-import { Task, Category } from "@prisma/client";
+import { Trash2, Calendar } from "lucide-react";
+import { Task, Category, Status } from "@prisma/client";
 import { EditTaskDialog } from "@/components/edit-task-dialog";
 
 type TaskWithRelations = Task & {
@@ -14,14 +14,31 @@ type TaskWithRelations = Task & {
 };
 
 export function TaskItem({ task }: { task: TaskWithRelations }) {
-  const isDone = task.status === "DONE";
+  const isDone = task.status === Status.DONE;
 
   const priorityColors: Record<string, string> = {
-    LOW: "bg-blue-500/10 text-blue-500",
-    MEDIUM: "bg-yellow-500/10 text-yellow-500",
-    HIGH: "bg-orange-500/10 text-orange-500",
-    URGENT: "bg-red-500/10 text-red-500",
+    LOW: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+    MEDIUM: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+    HIGH: "bg-orange-500/10 text-orange-500 border-orange-500/20",
+    URGENT: "bg-red-500/10 text-red-500 border-red-500/20",
   };
+
+  const statusStyles: Record<Status, { label: string; class: string }> = {
+    TODO: { label: "To Do", class: "bg-secondary text-secondary-foreground" },
+    IN_PROGRESS: { label: "In Progress", class: "bg-purple-500/10 text-purple-500 border-purple-500/20" },
+    DONE: { label: "Done", class: "bg-green-500/10 text-green-500 border-green-500/20" },
+    BACKLOG: { label: "Backlog", class: "bg-zinc-500/10 text-zinc-500 border-zinc-500/20" },
+    CANCELLED: { label: "Cancelled", class: "bg-red-500/10 text-red-500 border-red-500/20" },
+  };
+
+  // Format due date cleanly if present
+  const formattedDueDate = task.dueDate
+    ? new Date(task.dueDate).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
 
   return (
     <div className="flex items-center justify-between p-4 border rounded-lg bg-card hover:shadow-sm transition-all">
@@ -29,19 +46,30 @@ export function TaskItem({ task }: { task: TaskWithRelations }) {
         <Checkbox
           checked={isDone}
           onCheckedChange={(checked) =>
-            updateTaskStatus(task.id, checked ? "DONE" : "TODO")
+            updateTaskStatus(task.id, checked ? Status.DONE : Status.TODO)
           }
         />
         <div>
           <p className={`font-medium ${isDone ? "line-through text-muted-foreground" : ""}`}>
             {task.title}
           </p>
-          {task.description && (
-            <p className="text-xs text-muted-foreground">{task.description}</p>
-          )}
+          <div className="flex flex-wrap items-center gap-3 mt-1">
+            {task.description && (
+              <p className="text-xs text-muted-foreground">{task.description}</p>
+            )}
+            {formattedDueDate && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Calendar className="h-3 w-3" />
+                {formattedDueDate}
+              </span>
+            )}
+          </div>
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <Badge variant="outline" className={statusStyles[task.status].class}>
+          {statusStyles[task.status].label}
+        </Badge>
         <Badge variant="outline" className={priorityColors[task.priority]}>
           {task.priority}
         </Badge>

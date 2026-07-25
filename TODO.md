@@ -13,16 +13,16 @@
 - [x] Deploy initial app to Vercel
 
 ## Milestone 2
-- [ ] Design database schema
-- [ ] Implement task CRUD
-- [ ] Create task form
-- [ ] Build task list
+- [x] Design database schema
+- [x] Implement task CRUD
+- [x] Create task form
+- [x] Build task list
 
 ## Milestone 3
-- [ ] Dashboard
-- [ ] Search
-- [ ] Filters
-- [ ] Sorting
+- [x] Dashboard
+- [x] Search
+- [x] Filters
+- [x] Sorting
 
 ## Milestone 4
 - [ ] Calendar view
