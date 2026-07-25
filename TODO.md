@@ -25,7 +25,7 @@
 - [x] Sorting
 
 ## Milestone 4
-- [ ] Calendar view
+- [x] Calendar view
 
 ## Milestone 5
 - [ ] Categories

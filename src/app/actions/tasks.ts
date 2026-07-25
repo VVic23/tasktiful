@@ -166,3 +166,62 @@ export async function deleteTask(taskId: string) {
 
   revalidatePath("/tasks");
 }
+
+export async function getCategories() {
+  const session = await auth();
+  if (!session?.user?.id) return [];
+
+  return await prisma.category.findMany({
+    where: { userId: session.user.id },
+    orderBy: { name: "asc" },
+  });
+}
+
+export async function createCategory(name: string, color?: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  await prisma.category.create({
+    data: { name, color: color || "#6366f1", userId: session.user.id },
+  });
+
+  revalidatePath("/tasks");
+}
+
+export async function addSubtask(taskId: string, title: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  await prisma.task.create({
+    data: {
+      title,
+      userId: session.user.id,
+      parentId: taskId,
+    },
+  });
+
+  revalidatePath("/tasks");
+}
+
+export async function toggleSubtask(subtaskId: string, isDone: boolean) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  await prisma.task.update({
+    where: { id: subtaskId, userId: session.user.id },
+    data: { status: isDone ? Status.DONE : Status.TODO },
+  });
+
+  revalidatePath("/tasks");
+}
+
+export async function deleteSubtask(subtaskId: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  await prisma.task.delete({
+    where: { id: subtaskId, userId: session.user.id },
+  });
+
+  revalidatePath("/tasks");
+}

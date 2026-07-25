@@ -17,10 +17,33 @@ import { Task } from "@prisma/client";
 export function EditTaskDialog({ task }: { task: Task }) {
   const [open, setOpen] = useState(false);
 
-  // Format date to YYYY-MM-DD for standard <input type="date" />
-  const initialDueDate = task.dueDate
-    ? new Date(task.dueDate).toISOString().split("T")[0]
-    : "";
+  const formatForDateTimeInput = (date: Date | null) => {
+    if (!date) return "";
+    const d = new Date(date);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+
+  const [dueDate, setDueDate] = useState(() => formatForDateTimeInput(task.dueDate));
+
+  const handleDateTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = e.target.value;
+    if (!newVal) {
+      setDueDate("");
+      return;
+    }
+
+    const [newDate] = newVal.split("T");
+    const [oldDate] = dueDate ? dueDate.split("T") : [""];
+
+    // If the date part changed, set time to 23:59 (11:59 PM)
+    if (newDate !== oldDate) {
+      setDueDate(`${newDate}T23:59`);
+    } else {
+      // If date didn't change, preserve the user's manual time selection
+      setDueDate(newVal);
+    }
+  };
 
   async function handleSubmit(formData: FormData) {
     await updateTask(task.id, formData);
@@ -65,6 +88,8 @@ export function EditTaskDialog({ task }: { task: Task }) {
                 <option value="TODO">To Do</option>
                 <option value="IN_PROGRESS">In Progress</option>
                 <option value="DONE">Done</option>
+                <option value="BACKLOG">Backlog</option>
+                <option value="CANCELLED">Cancelled</option>
               </select>
             </div>
 
@@ -84,11 +109,14 @@ export function EditTaskDialog({ task }: { task: Task }) {
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Due Date</label>
+            <label className="text-xs text-muted-foreground mb-1 block">
+              Due Date & Time (Defaults to 11:59 PM)
+            </label>
             <input
-              type="date"
+              type="datetime-local"
               name="dueDate"
-              defaultValue={initialDueDate}
+              value={dueDate}
+              onChange={handleDateTimeChange}
               className="w-full p-2 border rounded-md bg-background text-sm"
             />
           </div>
